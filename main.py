@@ -12,9 +12,6 @@ clock = pygame.time.Clock()
 running = True
 state = config.MAIN
 
-def add_sprite(sprite, group):
-    all_sprites.add(sprite)
-    group.add(sprite)
 
 # sprite groups
 all_sprites = pygame.sprite.Group()
@@ -25,14 +22,20 @@ hives = pygame.sprite.Group()
 # fonts
 pause_text = pygame.font.SysFont('Comic Sans', 32).render('Pause', True, pygame.color.Color('White'))
 
+"""
+	fügt einen Sprite einer Gruppe hinzu und glechzeitig den Sprite
+	zur Gruppe wo alle Sprites drinne sind
+"""
+def add_sprite(sprite, group):
+    all_sprites.add(sprite)
+    group.add(sprite)
+    
 for _ in range(2):
 	add_sprite(hive.Hive(), hives)
 for _ in range(50):
 	add_sprite(bee.Bee(choice(hives.sprites()), random(), random()), bees)
 f = flower.Flower()
 add_sprite(f, flowers)
-
-
 
 def main():
 	global running
@@ -45,8 +48,7 @@ def main():
 				if event.key == pygame.K_p: state = config.PAUSE
 				if event.key == pygame.K_s: state = config.MAIN
 		if state == config.MAIN:
-			screen.fill("purple")
-
+			screen.fill(config.BACKGROUND_COLOR)
 			for bee in bees:
 				bee.draw(screen)
 			flowers.draw(screen)
