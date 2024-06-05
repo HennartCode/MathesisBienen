@@ -3,8 +3,6 @@ from random import randint
 import config
 
 class Hive(pygame.sprite.Sprite):
-	RADIUS 
-	
 	def __init__(self):
 		super().__init__()
 		self.image = pygame.Surface([20, 20])

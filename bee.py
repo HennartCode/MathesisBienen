@@ -25,9 +25,9 @@ class Bee(pygame.sprite.Sprite):
 
 	def update(self, flower):
 		delta_vec = pygame.math.Vector2((flower.rect.center) - self.float_rect)
-		_len = deltaVec.length()
+		_len = delta_vec.length()
 		if _len <= Bee.RADIUS and self.status == "neutral":
-			self.float_rect += delta_vec/_len * min(_len, Bee.SPEED))
+			self.float_rect += delta_vec/_len * min(_len, Bee.SPEED)
 			self.image.fill(Bee.ATTRACTED_COLOR)
 			if _len < 5:
 				self.status = "return"
