@@ -6,8 +6,9 @@ class Bee(pygame.sprite.Sprite):
 	WIDTH, HEIGHT = 20, 20
 	NEUTRAL_COLOR = (255, 255, 255)
 	ATTRACTED_COLOR = "red"
-	RETURN_COLOR = "green"
 	SPEED = 5
+	RETURN_COLOR = "green"
+	MAX_SPEED = 9.5
 	RADIUS = 100
 
 	def __init__(self, hive, dir_x, dir_y):
@@ -73,3 +74,11 @@ class Bee(pygame.sprite.Sprite):
 		self.rect.center = (int(round(self.float_rect.x)), int(round(self.float_rect.y)))
 		screen.blit(self.image, self.rect)
 	
+	def to_target(self, target_pos):
+		'''
+		wunschgeschwindigkeit auf Ziel
+		target_pos: pygame.math.Vector2
+		
+		Formel (21)
+		'''
+		return Bee.MAX/(target_pos-self.float_rect).normalize()*(target_pos-self.float_rect)
