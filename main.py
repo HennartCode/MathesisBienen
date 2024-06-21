@@ -29,7 +29,7 @@ pause_text = pygame.font.SysFont('Comic Sans', 32).render('Pause', True, pygame.
 def add_sprite(sprite, group):
     all_sprites.add(sprite)
     group.add(sprite)
-    
+
 for _ in range(2):
 	add_sprite(hive.Hive(), hives)
 for _ in range(50):
