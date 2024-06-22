@@ -47,14 +47,11 @@ class Bee(pygame.sprite.Sprite):
         radius_align = 25.0*scale
         radius_attract = 100.0*scale
 
-        repel_strength = 1
-        align_strength = 1
-        social_strength = 1
+        social_strength = 0.5
 
         nearestBeeDistTo = float("inf")
         NearestBeeVecTo = pygame.Vector2(0.0,0.0)
         NearestBeeDir = pygame.Vector2(0.0,0.0)
-        NearestBeeVel = 0
             
         ToFlower_vec = pygame.Vector2(0.0,0.0)
         ToHive_vec = pygame.Vector2(0.0,0.0)
@@ -87,10 +84,7 @@ class Bee(pygame.sprite.Sprite):
         if nearestBeeDistTo < radius_repel:
             social_vec = -NearestBeeVecTo.normalize()
 
-        # if math.isnan(social_vec):
-        #     print("socialvec is NAN")
-        #     exit()
-        
+
 
 
         # falls der Vektor zur Blume <= des Blumen Radius entspricht
@@ -118,7 +112,7 @@ class Bee(pygame.sprite.Sprite):
         
         #Move Bee        
         social_vec *= social_strength
-        self.dir = (self.dir + social_vec).normalize()
+        self.dir = (self.dir + social_vec + ToFlower_vec + ToHive_vec).normalize()
 
         self.float_rect += Bee.SPEED * self.dir
 
