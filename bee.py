@@ -68,8 +68,8 @@ class Bee(pygame.sprite.Sprite):
 
         # alle bienen durchgehen um nächste zu finden
         for bee in bees:
-            BeeVecTo = utils.neartest_vector(self.float_rect, bee.float_rect)
-            # BeeVecTo =  - self.float_rect + bee.float_rect #Vector zur gerade betrachteten Biene
+            # BeeVecTo = utils.neartest_vector(self.float_rect, bee.float_rect)
+            BeeVecTo =  - self.float_rect + bee.float_rect #Vector zur gerade betrachteten Biene
             BeeDistTo = BeeVecTo.length()
             if BeeDistTo < nearestBeeDistTo and BeeDistTo > 0:
                 NearestBeeVecTo = BeeVecTo

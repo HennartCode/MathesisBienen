@@ -32,7 +32,7 @@ def add_sprite(sprite, group):
 
 for _ in range(2):
 	add_sprite(hive.Hive(), hives)
-for _ in range(50):
+for _ in range(150):
 	add_sprite(bee.Bee(choice(hives.sprites()), random()-0.5, random()-0.5), bees)
 f = flower.Flower()
 add_sprite(f, flowers)
