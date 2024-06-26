@@ -1,5 +1,6 @@
 import pygame
 import math
+import config
 from random import randint
 
 class Bee(pygame.sprite.Sprite):
@@ -39,6 +40,20 @@ class Bee(pygame.sprite.Sprite):
         Sobald sie im Radius einer Blume kommt, verfärbt sie sich rot und fliegt zur Blume.
         Anschließend wird sie grün und fliegt zu ihrem Hive zurück.
     """
+    
+    def tp(self):
+        var_x = int(round(self.float_rect.x))
+        var_y = int(round(self.float_rect.y))
+        if var_x == config.WIDTH:
+            self.float_rect.x = 1
+        if var_x == 0:
+            self.float_rect.x = (config.HEIGHT-1)
+        if var_y == config.HEIGHT:
+            self.float_rect.y= 1
+        if var_y == 0:
+            self.float_rect.y = config.WIDTH-1
+    
+    #TODO Bienen Updaten nicht zu return
     def update(self, flower, bees):
 
         scale = 3.0
@@ -57,9 +72,6 @@ class Bee(pygame.sprite.Sprite):
         ToHive_vec = pygame.Vector2(0.0,0.0)
         social_vec = pygame.Vector2(0.0,0.0)
 
-
-
-        
         # Der Vektor von der Biene zur Blume
         to_flower = pygame.math.Vector2((flower.rect.center) - self.float_rect)
         _len = to_flower.length()
@@ -83,9 +95,6 @@ class Bee(pygame.sprite.Sprite):
 
         if nearestBeeDistTo < radius_repel:
             social_vec = -NearestBeeVecTo.normalize()
-
-
-
 
         # falls der Vektor zur Blume <= des Blumen Radius entspricht
         # und die Biene neutral ist, fliegt die Biene zur Blume
@@ -116,9 +125,7 @@ class Bee(pygame.sprite.Sprite):
 
         self.float_rect += Bee.SPEED * self.dir
 
-
-
-            
+        
 
     def draw(self, screen):
         self.rect.center = (int(round(self.float_rect.x)), int(round(self.float_rect.y)))
