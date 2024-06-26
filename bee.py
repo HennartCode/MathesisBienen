@@ -62,8 +62,8 @@ class Bee(pygame.sprite.Sprite):
         # Die Bewegung der Biene entschieden durch übergebene Argumente
         # während sie neutral ist 
         elif self.status == "neutral":
-            self.float_rect.x += Bee.SPEED * self.dir.x
-            self.float_rect.y += Bee.SPEED * self.dir.y
+            self.float_rect.x += Bee.speed * self.dir.x
+            self.float_rect.y += Bee.speed * self.dir.y
             
         # Hier ist de Status return und die Biene fliegt zu ihrem hive zurück:
         # ['self.hive']
@@ -71,7 +71,7 @@ class Bee(pygame.sprite.Sprite):
             self.image.fill(Bee.RETURN_COLOR)
             to_hive = pygame.math.Vector2((self.hive.rect.center) - self.float_rect)
             if to_hive.length() > 0:
-                self.float_rect += to_hive/to_hive.length() * min(to_hive.length(), Bee.SPEED)
+                self.float_rect += to_hive/to_hive.length() * min(to_hive.length(), Bee.speed)
 
     def draw(self, screen):
         self.rect.center = (int(round(self.float_rect.x)), int(round(self.float_rect.y)))
