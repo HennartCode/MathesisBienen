@@ -52,7 +52,7 @@ def main():
 			for bee in bees:
 				bee.draw(screen)
 			flowers.draw(screen)
-			bees.update(f)
+			bees.update(f,bees)
 			flowers.update(screen)
 			hives.draw(screen)
 
