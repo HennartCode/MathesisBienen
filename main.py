@@ -35,12 +35,12 @@ def add_sprite(sprite, group):
 Hives, deren Bienen und Blumen werden zu Spritegruppe hinzugefügt
 '''
 for _ in range(config.HIVES):
-    add_sprite(hive.Hive(), hives)
+    add_sprite(hive.Hive(uniform(10,config.WIDTH-10),uniform(10,config.HEIGHT-10)),hives)
 for _ in range(config.BEES):
     add_sprite(bee.Bee(choice(hives.sprites()), random(), random()), bees)
 prop_flower_list = []
 for i in range(config.FLOWERS):
-    prop_flower_list.append(flower.Flower(uniform(0,config.WIDTH),uniform(0,config.HEIGHT)))
+    prop_flower_list.append(flower.Flower(uniform(10,config.WIDTH-10),uniform(10,config.HEIGHT-10)))
     add_sprite(prop_flower_list[i],flowers)
 
 '''

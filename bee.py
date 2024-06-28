@@ -4,7 +4,7 @@ import config
 from random import randint
 
 class Bee(pygame.sprite.Sprite):
-    WIDTH, HEIGHT = 20, 20
+    WIDTH, HEIGHT = 5, 5
     NEUTRAL_COLOR = (255, 255, 255)
     ATTRACTED_COLOR = "red"
     RETURN_COLOR = "green"
@@ -50,11 +50,11 @@ class Bee(pygame.sprite.Sprite):
         pos_y = int(round(self.float_rect.y))
         if pos_x >= config.WIDTH:
             self.float_rect.x = 1
-        if pos_x <= 0:
+        elif pos_x <= 0:
             self.float_rect.x = (config.HEIGHT-1)
         if pos_y >= config.HEIGHT:
             self.float_rect.y= 1
-        if pos_y <= 0:
+        elif pos_y <= 0:
             self.float_rect.y = config.WIDTH-1
     
     #TODO Bienen Updaten nicht zu return
@@ -66,7 +66,7 @@ class Bee(pygame.sprite.Sprite):
         radius_align = 25.0*scale
         radius_attract = 100.0*scale
 
-        social_strength = 0.5
+        social_strength = 0.3
 
         nearestBeeDistTo = float("inf")
         NearestBeeVecTo = pygame.Vector2(0.0,0.0)
@@ -108,7 +108,7 @@ class Bee(pygame.sprite.Sprite):
             
             # Ist sie nah genug dran, ändere den status und die Biene fliegt
             # zurück zum hive
-            if _len < 5:
+            if _len < 20:
                 self.status = "return"
 
         # Die Bewegung der Biene entschieden durch übergebene Argumente
@@ -122,12 +122,12 @@ class Bee(pygame.sprite.Sprite):
         elif self.status == "return": 
             self.image.fill(Bee.RETURN_COLOR)
             to_hive = pygame.math.Vector2((self.hive.rect.center) - self.float_rect)
-            if to_hive.length() > 5:
+            if to_hive.length() > 0:
                 ToHive_vec = to_hive/to_hive.length() * min(to_hive.length(), Bee.SPEED)
             else:
                 self.status == "neutral"
-        
-        #Move Bee        
+         
+        #Move Bee
         social_vec *= social_strength
         self.dir = (self.dir + social_vec + ToFlower_vec + ToHive_vec).normalize()
 
