@@ -38,10 +38,8 @@ for _ in range(config.HIVES):
     add_sprite(hive.Hive(uniform(10,config.WIDTH-10),uniform(10,config.HEIGHT-10)),hives)
 for _ in range(config.BEES):
     add_sprite(bee.Bee(choice(hives.sprites()), random(), random()), bees)
-prop_flower_list = []
 for i in range(config.FLOWERS):
-    prop_flower_list.append(flower.Flower(uniform(10,config.WIDTH-10),uniform(10,config.HEIGHT-10)))
-    add_sprite(prop_flower_list[i],flowers)
+    add_sprite(flower.Flower(uniform(10,config.WIDTH-10),uniform(10,config.HEIGHT-10)), flowers)
 
 '''
 prop_flower = flower.Flower()
@@ -68,8 +66,8 @@ def main():
                 bee.draw(screen)
             flowers.draw(screen)
             #bees.update(flowers,bees)
-            for i in prop_flower_list:
-                bees.update(i,bees)
+            for f in flowers:
+                bees.update(f,bees)
                 #bees.update(prop_flower_list[1],bees)
             flowers.update(screen)
             hives.draw(screen)
@@ -77,7 +75,7 @@ def main():
         else:
             screen.blit(pause_text, (config.WIDTH - 100, 20))
         pygame.display.flip()
-        clock.tick(60)
+        clock.tick(30)
     pygame.quit()
 
 if __name__ == "__main__":
