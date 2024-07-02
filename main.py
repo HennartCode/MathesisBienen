@@ -75,7 +75,7 @@ def main():
         else:
             screen.blit(pause_text, (config.WIDTH - 100, 20))
         pygame.display.flip()
-        clock.tick(30)
+        clock.tick(60)
     pygame.quit()
 
 if __name__ == "__main__":

@@ -45,6 +45,8 @@ class Bee(pygame.sprite.Sprite):
     Bienen werden auf die gegenüberliegende Seite teleportiert sobald sie
     den Ramen ueberschreiten.
     Funktioniert voll okay, auch ohne Torus-Distanz (oberflächlich)
+    TODO: wenn Biene von Blume angezogen werden und teleportieren, dann bleiben sie rot
+    --> reset oder so
     '''
     def tp(self):
         pos_x = int(round(self.float_rect.x))
@@ -67,7 +69,7 @@ class Bee(pygame.sprite.Sprite):
         radius_align = 25.0*scale
         radius_attract = 100.0*scale
 
-        social_strength = 0.3
+        social_strength = 0.5
 
         nearestBeeDistTo = float("inf")
         NearestBeeVecTo = pygame.Vector2(0.0,0.0)
@@ -76,6 +78,8 @@ class Bee(pygame.sprite.Sprite):
         ToFlower_vec = pygame.Vector2(0.0,0.0)
         ToHive_vec = pygame.Vector2(0.0,0.0)
         social_vec = pygame.Vector2(0.0,0.0)
+        
+        NearestBeeStatus = None
 
         # Der Vektor von der Biene zur Blume
         flower_pos = pygame.math.Vector2(flower.rect.center[0], flower.rect.center[1])
@@ -86,29 +90,44 @@ class Bee(pygame.sprite.Sprite):
 
         # alle bienen durchgehen um nächste zu finden
         for bee in bees:
-            BeeVecTo =  - self.float_rect + bee.float_rect #Vector zur gerade betrachteten Biene
+            BeeVecTo =  bee.float_rect - self.float_rect  #Vector zur gerade betrachteten Biene
             BeeDistTo = BeeVecTo.length()
             if BeeDistTo < nearestBeeDistTo and BeeDistTo > 0:
                 NearestBeeVecTo = BeeVecTo
                 nearestBeeDistTo = BeeDistTo
                 NearestBeeDir = bee.dir
                 NearestBeeVel = bee.SPEED
+                NearestBeeStatus = bee.status
+                #print(nearBee)
+        
+        #ich weiß das ist voll schlecht so aber mir fällt grad nichts besseres ein
+        #ignoriert bienen anderen typs wenn IGNOREOTHERS = True
+        #imo etwas sinnvoller denn, warum sollten suchende bienen anderen zum hive folgen
+        #keine so großes Chaos bei hoher social_strength
+        if config.IGNOREOTHERS:
+            if self.status == NearestBeeStatus:
+                if nearestBeeDistTo < radius_attract and nearestBeeDistTo > radius_align:
+                    social_vec = NearestBeeVecTo.normalize()
 
+                if nearestBeeDistTo < radius_align and nearestBeeDistTo > radius_repel:
+                    social_vec = NearestBeeDir
 
-        if nearestBeeDistTo < radius_attract and nearestBeeDistTo > radius_align:
-            social_vec = NearestBeeVecTo.normalize()
+                if nearestBeeDistTo < radius_repel:
+                    social_vec = -NearestBeeVecTo.normalize()
+        else:
+                if nearestBeeDistTo < radius_attract and nearestBeeDistTo > radius_align:
+                    social_vec = NearestBeeVecTo.normalize()
 
-        if nearestBeeDistTo < radius_align and nearestBeeDistTo > radius_repel:
-            social_vec = NearestBeeDir
+                if nearestBeeDistTo < radius_align and nearestBeeDistTo > radius_repel:
+                    social_vec = NearestBeeDir
 
-        if nearestBeeDistTo < radius_repel:
-            social_vec = -NearestBeeVecTo.normalize()
-
+                if nearestBeeDistTo < radius_repel:
+                    social_vec = -NearestBeeVecTo.normalize()
         # falls der Vektor zur Blume <= des Blumen Radius entspricht
         # und die Biene neutral ist, fliegt die Biene zur Blume
         if _len <= Bee.RADIUS and self.status == "neutral":
             ToFlower_vec = to_flower/_len * min(_len, Bee.SPEED)
-            print(ToFlower_vec)
+            #print(ToFlower_vec)
             self.image.fill(Bee.ATTRACTED_COLOR)
             
             # Ist sie nah genug dran, ändere den status und die Biene fliegt
@@ -129,7 +148,7 @@ class Bee(pygame.sprite.Sprite):
             to_hive = pygame.math.Vector2((self.hive.rect.center) - self.float_rect)
             if to_hive.length() > 5:
                 ToHive_vec = to_hive/to_hive.length() * min(to_hive.length(), Bee.SPEED)
-            else:
+            elif config.ENDLESS:
                 self.status = "neutral"
                 self.image.fill(Bee.NEUTRAL_COLOR)
          
@@ -145,4 +164,4 @@ class Bee(pygame.sprite.Sprite):
     def draw(self, screen):
         self.rect.center = (int(round(self.float_rect.x)), int(round(self.float_rect.y)))
         screen.blit(self.image, self.rect)
-    
+ 
