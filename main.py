@@ -38,7 +38,7 @@ for _ in range(config.HIVES):
         groups.hives,
     )
 for _ in range(config.BEES):
-    add_sprite(bee.Bee(choice(groups.hives.sprites()), random(), random()), groups.bees)
+    add_sprite(bee.Bee(choice(groups.hives.sprites())), groups.bees)
 for i in range(config.FLOWERS):
     add_sprite(
         flower.Flower(uniform(10, config.WIDTH - 10), uniform(10, config.HEIGHT - 10)),
