@@ -5,7 +5,7 @@ from random import randint
 
 class Bee(pygame.sprite.Sprite):
 
-    WIDTH, HEIGHT = 20, 20
+    WIDTH, HEIGHT = 3, 3
     NEUTRAL_COLOR = (255, 255, 255)
     ATTRACTED_COLOR = "red"
     RETURN_COLOR = "green"
@@ -126,7 +126,7 @@ class Bee(pygame.sprite.Sprite):
             if to_hive.length() > 5:
                 ToHive_vec = to_hive/to_hive.length() * min(to_hive.length(), Bee.SPEED)
             else:
-                self.status == "neutral"
+                self.status = "neutral"
         
         #Move Bee        
         social_vec *= social_strength
