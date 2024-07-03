@@ -3,6 +3,7 @@ import config
 import bee
 import flower
 import hive
+import analysis
 from random import random, choice, uniform
 
 pygame.init()
@@ -50,6 +51,8 @@ add_sprite(prop_flower, flowers)
 def main():
     global running
     global state
+    counter = 0
+    populationVisual = analysis.analysis()
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -76,6 +79,10 @@ def main():
             screen.blit(pause_text, (config.WIDTH - 100, 20))
         pygame.display.flip()
         clock.tick(60)
+        counter += 1
+        if counter%30==0:
+            populationVisual.VisualizePopulation(len(bees))
+            counter = 0
     pygame.quit()
 
 if __name__ == "__main__":

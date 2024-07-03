@@ -66,8 +66,8 @@ class Bee(pygame.sprite.Sprite):
         scale = 3.0
 
         radius_repel = 3.0*scale
-        radius_align = 25.0*scale
-        radius_attract = 100.0*scale
+        radius_align = 4.0*scale
+        radius_attract = 600.0*scale
 
         social_strength = 0.5
 
