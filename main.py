@@ -3,7 +3,7 @@ import config
 import bee
 import flower
 import hive
-from random import random, choice
+from random import random, choice, uniform
 
 pygame.init()
 screen = pygame.display.set_mode((config.WIDTH, config.HEIGHT))
@@ -23,45 +23,63 @@ hives = pygame.sprite.Group()
 pause_text = pygame.font.SysFont('Comic Sans', 32).render('Pause', True, pygame.color.Color('White'))
 
 """
-	fügt einen Sprite einer Gruppe hinzu und glechzeitig den Sprite
-	zur Gruppe wo alle Sprites drinne sind
+    fügt einen Sprite einer Gruppe hinzu und glechzeitig den Sprite
+    zur Gruppe wo alle Sprites drinne sind
 """
 def add_sprite(sprite, group):
     all_sprites.add(sprite)
     group.add(sprite)
-    
-for _ in range(2):
-	add_sprite(hive.Hive(), hives)
-for _ in range(50):
-	add_sprite(bee.Bee(choice(hives.sprites()), random()-0.5, random()-0.5), bees)
-f = flower.Flower()
-add_sprite(f, flowers)
+
+
+
+'''
+Hives, deren Bienen und Blumen werden zu Spritegruppe hinzugefügt
+'''
+for _ in range(config.HIVES):
+    add_sprite(hive.Hive(), hives)
+for _ in range(config.BEES):
+    add_sprite(bee.Bee(choice(hives.sprites()), random(), random()), bees)
+prop_flower_list = []
+for i in range(config.FLOWERS):
+    prop_flower_list.append(flower.Flower(uniform(0,config.WIDTH),uniform(0,config.HEIGHT)))
+    add_sprite(prop_flower_list[i],flowers)
+
+'''
+prop_flower = flower.Flower()
+add_sprite(prop_flower, flowers)
+'''
 
 def main():
-	global running
-	global state
-	while running:
-		for event in pygame.event.get():
-			if event.type == pygame.QUIT:
-				running = False
-			if event.type == pygame.KEYDOWN:
-				if event.key == pygame.K_p: state = config.PAUSE
-				if event.key == pygame.K_s: state = config.MAIN
-		if state == config.MAIN:
-			screen.fill(config.BACKGROUND_COLOR)
-			for bee in bees:
-				bee.draw(screen)
-			flowers.draw(screen)
-			bees.update(f,bees)
-			flowers.update(screen)
-			hives.draw(screen)
-
-		else:
-			screen.blit(pause_text, (config.WIDTH - 100, 20))
-		pygame.display.flip()
-		clock.tick(60)
-	pygame.quit()
+    global running
+    global state
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:
+                    if state == config.MAIN:
+                        state = config.PAUSE
+                    elif state == config.PAUSE:
+                        state = config.MAIN
+        
+        if state == config.MAIN:
+            screen.fill(config.BACKGROUND_COLOR)
+            for bee in bees:
+                bee.draw(screen)
+            flowers.draw(screen)
+            #bees.update(flowers,bees)
+            for i in prop_flower_list:
+                bees.update(i,bees)
+                #bees.update(prop_flower_list[1],bees)
+            flowers.update(screen)
+            hives.draw(screen)
+        else:
+            screen.blit(pause_text, (config.WIDTH - 100, 20))
+        pygame.display.flip()
+        clock.tick(60)
+    pygame.quit()
 
 if __name__ == "__main__":
-	main()
+    main()
 

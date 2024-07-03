@@ -1,10 +1,11 @@
 import pygame
 import math
+import config
 from random import randint
 
 class Bee(pygame.sprite.Sprite):
 
-    WIDTH, HEIGHT = 4, 4
+    WIDTH, HEIGHT = 20, 20
     NEUTRAL_COLOR = (255, 255, 255)
     ATTRACTED_COLOR = "red"
     RETURN_COLOR = "green"
@@ -31,7 +32,7 @@ class Bee(pygame.sprite.Sprite):
                 neutral => war noch bei keiner Blume
                 return => war bei der Blume und kehrt zum hive zurück
         """
-        self.status = "neutral" # todo make it enum
+        self.status = "neutral" #TODO make it enum
 
     """
         Das Verhalten der Bienen wird mit dieser Methode jedes Frame aktualisiert/ausgeführt.
@@ -40,6 +41,24 @@ class Bee(pygame.sprite.Sprite):
         Sobald sie im Radius einer Blume kommt, verfärbt sie sich rot und fliegt zur Blume.
         Anschließend wird sie grün und fliegt zu ihrem Hive zurück.
     """
+    '''
+    Bienen werden auf die gegenüberliegende Seite teleportiert sobald sie
+    den Ramen ueberschreiten.
+    Funktioniert voll okay, auch ohne Torus-Distanz (oberflächlich)
+    '''
+    def tp(self):
+        pos_x = int(round(self.float_rect.x))
+        pos_y = int(round(self.float_rect.y))
+        if pos_x >= config.WIDTH:
+            self.float_rect.x = 1
+        if pos_x <= 0:
+            self.float_rect.x = (config.HEIGHT-1)
+        if pos_y >= config.HEIGHT:
+            self.float_rect.y= 1
+        if pos_y <= 0:
+            self.float_rect.y = config.WIDTH-1
+    
+    #TODO Bienen Updaten nicht zu return
     def update(self, flower, bees):
 
         scale = 3.0
@@ -58,9 +77,6 @@ class Bee(pygame.sprite.Sprite):
         ToHive_vec = pygame.Vector2(0.0,0.0)
         social_vec = pygame.Vector2(0.0,0.0)
 
-
-
-        
         # Der Vektor von der Biene zur Blume
         to_flower = pygame.math.Vector2((flower.rect.center) - self.float_rect)
         _len = to_flower.length()
@@ -85,9 +101,6 @@ class Bee(pygame.sprite.Sprite):
         if nearestBeeDistTo < radius_repel:
             social_vec = -NearestBeeVecTo.normalize()
 
-
-
-
         # falls der Vektor zur Blume <= des Blumen Radius entspricht
         # und die Biene neutral ist, fliegt die Biene zur Blume
         if _len <= Bee.RADIUS and self.status == "neutral":
@@ -105,21 +118,24 @@ class Bee(pygame.sprite.Sprite):
             
         # Hier ist de Status return und die Biene fliegt zu ihrem hive zurück:
         # ['self.hive']
+        
+        # ist config.ENDLESS = True ist status "neutral" wenn Bienen Hive erreichen
         elif self.status == "return": 
             self.image.fill(Bee.RETURN_COLOR)
             to_hive = pygame.math.Vector2((self.hive.rect.center) - self.float_rect)
-            if to_hive.length() > 0:
+            if to_hive.length() > 5:
                 ToHive_vec = to_hive/to_hive.length() * min(to_hive.length(), Bee.SPEED)
+            else:
+                self.status == "neutral"
         
         #Move Bee        
         social_vec *= social_strength
         self.dir = (self.dir + social_vec + ToFlower_vec + ToHive_vec).normalize()
 
         self.float_rect += Bee.SPEED * self.dir
+        self.tp()
 
-
-
-            
+        
 
     def draw(self, screen):
         self.rect.center = (int(round(self.float_rect.x)), int(round(self.float_rect.y)))
