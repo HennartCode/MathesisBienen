@@ -1,8 +1,9 @@
 import pygame
 import math
 import config
-from random import randint
+from random import uniform,random
 import utils
+import time as time 
 
 class Bee(pygame.sprite.Sprite):
     WIDTH, HEIGHT = 5, 5
@@ -11,8 +12,8 @@ class Bee(pygame.sprite.Sprite):
     RETURN_COLOR = "green"
     SPEED = 1
     RADIUS = 100
-
-    def __init__(self, hive, dir_x, dir_y):
+    STARTTIME = time.time()
+    def __init__(self, hive,lebensdauer):
         super().__init__()
         self.image = pygame.Surface([Bee.WIDTH, Bee.HEIGHT])
         self.image.fill(Bee.NEUTRAL_COLOR)
@@ -20,7 +21,8 @@ class Bee(pygame.sprite.Sprite):
         self.hive = hive	
         self.rect.x = hive.rect.x
         self.rect.y = hive.rect.y
-        self.dir = pygame.math.Vector2(dir_x, dir_y).normalize()
+        self.dir = pygame.math.Vector2(random(),random()).normalize()
+        self.lebensdauer = uniform(lebensdauer,lebensdauer+10)#in Sekunden
         """
             Speichert die Position der Biene als Float, wichtig für interne
             Verarbeitung, ['self.rect'] wird intern von pygame benutzt, dafür
@@ -33,6 +35,7 @@ class Bee(pygame.sprite.Sprite):
                 return => war bei der Blume und kehrt zum hive zurück
         """
         self.status = "neutral" #TODO make it enum
+        self.living = True
 
     """
         Das Verhalten der Bienen wird mit dieser Methode jedes Frame aktualisiert/ausgeführt.
@@ -74,7 +77,6 @@ class Bee(pygame.sprite.Sprite):
         nearestBeeDistTo = float("inf")
         NearestBeeVecTo = pygame.Vector2(0.0,0.0)
         NearestBeeDir = pygame.Vector2(0.0,0.0)
-            
         ToFlower_vec = pygame.Vector2(0.0,0.0)
         ToHive_vec = pygame.Vector2(0.0,0.0)
         social_vec = pygame.Vector2(0.0,0.0)
@@ -87,6 +89,12 @@ class Bee(pygame.sprite.Sprite):
         # ob Biene über torus oder nicht
         to_flower = utils.nearest_vector(self.float_rect, flower_pos)
         _len = to_flower.length()
+        
+        #Biene stirbt nach gewisser Zeit
+        if(time.time()-self.STARTTIME>=self.lebensdauer):
+            self.die()
+            print("die",self.hive.name)
+
 
         # alle bienen durchgehen um nächste zu finden
         for bee in bees:
@@ -96,9 +104,7 @@ class Bee(pygame.sprite.Sprite):
                 NearestBeeVecTo = BeeVecTo
                 nearestBeeDistTo = BeeDistTo
                 NearestBeeDir = bee.dir
-                NearestBeeVel = bee.SPEED
                 NearestBeeStatus = bee.status
-                #print(nearBee)
         
         #ich weiß das ist voll schlecht so aber mir fällt grad nichts besseres ein
         #ignoriert bienen anderen typs wenn IGNOREOTHERS = True
@@ -158,10 +164,14 @@ class Bee(pygame.sprite.Sprite):
 
         self.float_rect += Bee.SPEED * self.dir
         self.tp()
-
-        
+       
+    #Biene 'stribt' und wird von Spritegruppe entfernt --> nicht mehr aktualisiert/gezeichnet
+    def die(self):
+        self.hive.livingBees -= 1
+        print("dead",self.hive.name,self.hive.livingBees)
+        self.living = False
+        self.kill()
 
     def draw(self, screen):
-        self.rect.center = (int(round(self.float_rect.x)), int(round(self.float_rect.y)))
-        screen.blit(self.image, self.rect)
- 
+            self.rect.center = (int(round(self.float_rect.x)), int(round(self.float_rect.y)))
+            screen.blit(self.image, self.rect) 
