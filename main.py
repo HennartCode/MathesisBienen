@@ -33,16 +33,19 @@ def add_sprite(sprite, group):
 '''
 Hives, deren Bienen und Blumen werden zu Spritegruppe hinzugefügt
 '''
-for i in range(config.HIVES):
-    add_sprite(hive.Hive(uniform(10,config.WIDTH-10),uniform(10,config.HEIGHT-10),i),hives)
+for hiveNum in range(config.HIVES):
+    add_sprite(hive.Hive(uniform(10,config.WIDTH-10),uniform(10,config.HEIGHT-10),hiveNum),hives)
 for i in range(config.BEES):
-    add_sprite(bee.Bee(choice(hives.sprites()), config.LEBENSDAUER), bees)
+    for hive in hives:
+        add_sprite(bee.Bee(hive, config.LEBENSDAUER), bees)
 for i in range(config.FLOWERS):
     add_sprite(flower.Flower(uniform(10,config.WIDTH-10),uniform(10,config.HEIGHT-10)), flowers)
+
 def main():
     global running
     global state
     startzeit = time.time()
+    zeitintervall = 0
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -66,18 +69,22 @@ def main():
             flowers.draw(screen)
             hives.draw(screen)
             
-            curTime =time.time()
-            if (curTime-startzeit>=30):
+            curTime = time.time()
+            if ((curTime-startzeit)>2):
+                print("update")
                 for hive in hives:
-                    hive.dataUpdate()
-                    startzeit = curTime
+                    hive.dataUpdate(zeitintervall)
+                    print(hive)
+                startzeit = curTime
+                zeitintervall += 1
         #PAUSE
         else:
             screen.blit(pause_text, (config.WIDTH - 100, 20))
         pygame.display.flip()
         clock.tick(60)
+
     for hive in hives:
-        print(hive.data)
+        print(hive.name,hive.data)
     pygame.quit()
 
 if __name__ == "__main__":

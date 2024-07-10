@@ -18,7 +18,7 @@ class Bee(pygame.sprite.Sprite):
         self.image = pygame.Surface([Bee.WIDTH, Bee.HEIGHT])
         self.image.fill(Bee.NEUTRAL_COLOR)
         self.rect = self.image.get_rect()
-        self.hive = hive	
+        self.hive = hive
         self.rect.x = hive.rect.x
         self.rect.y = hive.rect.y
         self.dir = pygame.math.Vector2(random(),random()).normalize()
@@ -93,7 +93,7 @@ class Bee(pygame.sprite.Sprite):
         #Biene stirbt nach gewisser Zeit
         if(time.time()-self.STARTTIME>=self.lebensdauer):
             self.die()
-            print("die",self.hive.name)
+            print("die",self.hive.name,self.hive.livingBees)
 
 
         # alle bienen durchgehen um nächste zu finden
@@ -167,9 +167,7 @@ class Bee(pygame.sprite.Sprite):
        
     #Biene 'stribt' und wird von Spritegruppe entfernt --> nicht mehr aktualisiert/gezeichnet
     def die(self):
-        self.hive.livingBees -= 1
-        print("dead",self.hive.name,self.hive.livingBees)
-        self.living = False
+        self.hive.addLivingBee(-1)
         self.kill()
 
     def draw(self, screen):

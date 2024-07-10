@@ -1,5 +1,4 @@
 import pygame
-from random import randint
 import config
 '''
 Hive()
@@ -17,8 +16,11 @@ class Hive(pygame.sprite.Sprite):
         self.rect.y = y
         self.livingBees = config.BEES
         self.name = name
-        self.data = [(0,0)]
+        self.data = []
 
     def dataUpdate(self,time):
         self.data.append((self.livingBees,time))
+
+    def addLivingBee(self,beeNum):
+        self.livingBees += beeNum
 
