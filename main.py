@@ -5,7 +5,7 @@ import flower
 import hive
 from random import random, choice, uniform
 import time as time
-
+import matplotlib as plt
 pygame.init()
 screen = pygame.display.set_mode((config.WIDTH, config.HEIGHT))
 clock = pygame.time.Clock()
