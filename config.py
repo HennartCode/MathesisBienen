@@ -6,8 +6,8 @@ BACKGROUND_COLOR = "gray"
 
 #---Spielfeld---
 
-BEES = 10 #pro Hive
-HIVES  = 2
+BEES = 50 #pro Hive
+HIVES  = 3
 FLOWERS = 3
 HINDERNISSE = 0 #TODO hindernisse hinzufuegen
 

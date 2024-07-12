@@ -5,7 +5,7 @@ import flower
 import hive
 from random import random, choice, uniform
 import time as time
-import matplotlib as plt
+import matplotlib.pyplot as plt
 pygame.init()
 screen = pygame.display.set_mode((config.WIDTH, config.HEIGHT))
 clock = pygame.time.Clock()
@@ -70,7 +70,7 @@ def main():
             hives.draw(screen)
             
             curTime = time.time()
-            if ((curTime-startzeit)>2):
+            if ((curTime-startzeit)>1):
                 print("update")
                 for hive in hives:
                     hive.dataUpdate(zeitintervall)
@@ -82,10 +82,14 @@ def main():
             screen.blit(pause_text, (config.WIDTH - 100, 20))
         pygame.display.flip()
         clock.tick(60)
-
+    #END
     for hive in hives:
         print(hive.name,hive.data)
+        l1 = [x[0] for x in hive.data]
+        l2 = [x[1] for x in hive.data]
+        plt.plot(l1,l2)
     pygame.quit()
+    plt.show()
 
 if __name__ == "__main__":
-    main()
+     main()
