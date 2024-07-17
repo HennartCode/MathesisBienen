@@ -1,9 +1,10 @@
 import pygame
 import config
+
 '''
-Hive()
-Das Hive ist der Spawntpunkt von einer bestimmten Anzahl(config.BEES) an Bienen.
-Sobald eine Biene ihr Blumenziel erreicht hat, fliegt sie zu diesem zurück
+    Hive()
+    Das Hive ist der Spawntpunkt von einer bestimmten Anzahl(config.BEES) an Bienen.
+    Sobald eine Biene ihr Blumenziel erreicht hat, fliegt sie zu diesem zurück
 '''
 POLLENZIEL = 2 #neue Biene spwant wenn erreicht
 class Hive(pygame.sprite.Sprite):
@@ -19,9 +20,16 @@ class Hive(pygame.sprite.Sprite):
         self.data = []
         self.pollen = 0
 
+    '''
+        Erweitert die data-liste mit einem Tupel
+        Das Tupel enthaelt die Anzahl der leben Bienen des Hives abhängig von der Zeit 
+    '''
     def dataUpdate(self,time):
         self.data.append((self.livingBees,time))
 
+    '''
+        Addiert zu livingBees, also Anzahl der lebenden Bienen des Hives
+    '''
     def addLivingBee(self,beeNum):
         self.livingBees += beeNum
 

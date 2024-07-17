@@ -6,6 +6,8 @@ import hive
 from random import uniform
 import time as time
 import matplotlib.pyplot as plt
+
+#Init-Routine
 pygame.init()
 screen = pygame.display.set_mode((config.WIDTH, config.HEIGHT))
 clock = pygame.time.Clock()
@@ -41,6 +43,9 @@ for i in range(config.BEES):
 for i in range(config.FLOWERS):
     add_sprite(flower.Flower(uniform(10,config.WIDTH-10),uniform(10,config.HEIGHT-10)), flowers)
 
+'''
+Main
+'''
 def main():
     global running
     global state
@@ -68,12 +73,6 @@ def main():
 
             for flower in flowers:
                 bees.update(flower,bees)
-            #TODO: fix
-            '''
-            for hive in hives:
-                if(hive.checkPollen()):
-                    hive.addBee(bees)
-            '''
             flowers.update(screen) 
             flowers.draw(screen)
             hives.draw(screen)
