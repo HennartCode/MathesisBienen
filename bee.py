@@ -23,7 +23,9 @@ class Bee(pygame.sprite.Sprite):
         self.hive = hive
         self.rect.x = hive.rect.x
         self.rect.y = hive.rect.y
-        self.dir = pygame.math.Vector2(random(), random()).normalize()
+        self.dir = pygame.math.Vector2(
+            uniform(-1.0, -1.0), uniform(-1.0, -1.0)
+        ).normalize()
         self.lebensdauer = uniform(lebensdauer, lebensdauer + 10)  # in Sekunden
         self.lastflower = None
         """
@@ -170,7 +172,9 @@ class Bee(pygame.sprite.Sprite):
                 self.status = "neutral"
                 self.image.fill(Bee.NEUTRAL_COLOR)
                 self.hive.pollen += 1
-                self.dir = pygame.math.Vector2(random(), random()).normalize()
+                self.dir = pygame.math.Vector2(
+                    uniform(-1.0, -1.0), uniform(-1.0, -1.0)
+                ).normalize()
 
         # Move Bee
         social_vec *= social_strength
