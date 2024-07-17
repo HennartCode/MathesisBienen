@@ -16,4 +16,4 @@ LEBENSDAUER = 10 #in sekunden
 
 #---Extra---
 ENDLESS=True
-IGNOREOTHERS=False
+IGNOREOTHERS=True

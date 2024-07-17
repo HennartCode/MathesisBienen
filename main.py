@@ -3,7 +3,7 @@ import config
 import bee
 import flower
 import hive
-from random import random, choice, uniform
+from random import uniform
 import time as time
 import matplotlib.pyplot as plt
 pygame.init()
@@ -46,7 +46,11 @@ def main():
     global state
     startzeit = time.time()
     zeitintervall = 0
+    #Gameloop:
     while running:
+        '''
+        Keypress
+        '''
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -64,7 +68,12 @@ def main():
 
             for flower in flowers:
                 bees.update(flower,bees)
-
+            #TODO: fix
+            '''
+            for hive in hives:
+                if(hive.checkPollen()):
+                    hive.addBee(bees)
+            '''
             flowers.update(screen) 
             flowers.draw(screen)
             hives.draw(screen)

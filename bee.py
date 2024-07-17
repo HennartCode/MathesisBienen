@@ -1,5 +1,4 @@
 import pygame
-import math
 import config
 from random import uniform,random
 import utils
@@ -13,6 +12,7 @@ class Bee(pygame.sprite.Sprite):
     SPEED = 1
     RADIUS = 100
     STARTTIME = time.time()
+    FLOWERGOAL = 2
     def __init__(self, hive,lebensdauer):
         super().__init__()
         self.image = pygame.Surface([Bee.WIDTH, Bee.HEIGHT])
@@ -23,6 +23,7 @@ class Bee(pygame.sprite.Sprite):
         self.rect.y = hive.rect.y
         self.dir = pygame.math.Vector2(random(),random()).normalize()
         self.lebensdauer = uniform(lebensdauer,lebensdauer+10)#in Sekunden
+        self.lastflower = None
         """
             Speichert die Position der Biene als Float, wichtig für interne
             Verarbeitung, ['self.rect'] wird intern von pygame benutzt, dafür
@@ -88,8 +89,10 @@ class Bee(pygame.sprite.Sprite):
         # TODO solange blumen radius auch nicht über torus verläfut macht das keinen Unterschied
         # ob Biene über torus oder nicht
         to_flower = utils.nearest_vector(self.float_rect, flower_pos)
+        #if(flower != self.lastflower):
         _len = to_flower.length()
-        
+        #else:
+        #    _len = Bee.RADIUS+1
         #Biene stirbt nach gewisser Zeit
         if(time.time()-self.STARTTIME>=self.lebensdauer):
             self.die()
@@ -140,6 +143,9 @@ class Bee(pygame.sprite.Sprite):
             # zurück zum hive
             if _len < 20:
                 self.status = "return"
+                #Biene erhält Nahrung --> lebensdauer verlängern
+                self.lebensdauer += 5
+                self.lastflower = flower
 
         # Die Bewegung der Biene entschieden durch übergebene Argumente
         # während sie neutral ist 
@@ -157,6 +163,8 @@ class Bee(pygame.sprite.Sprite):
             elif config.ENDLESS:
                 self.status = "neutral"
                 self.image.fill(Bee.NEUTRAL_COLOR)
+                self.hive.pollen += 1
+
          
         #Move Bee
         social_vec *= social_strength
