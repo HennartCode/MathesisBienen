@@ -93,7 +93,7 @@ class Bee(pygame.sprite.Sprite):
         flower_pos = pygame.math.Vector2(flower.rect.center[0], flower.rect.center[1])
         # TODO solange blumen radius auch nicht über torus verläfut macht das keinen Unterschied
         # ob Biene über torus oder nicht
-        to_flower = utils.nearest_vector(self.float_rect, flower_pos)
+        to_flower = utils.nearestVector(self.float_rect, flower_pos)
         # if(flower != self.lastflower):
         _len = to_flower.length()
         # else:

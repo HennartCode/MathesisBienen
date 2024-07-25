@@ -14,7 +14,7 @@ t = [
 
 # findet den kürzesten Vektor zwischen zwei Vektoren,
 # dabei wird das Simulationsfeld als Torus behandelt
-def nearest_vector(pos1, pos2):
+def nearestVector(pos1, pos2):
     """
         pos1: pygame.math.Vector2
         pos2: pygame.math.Vector2
