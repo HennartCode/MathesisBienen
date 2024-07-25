@@ -1,11 +1,12 @@
 import pygame
 import config
-from random import uniform, random
+from random import uniform
 import utils
 import time as time
 
 
 class Bee(pygame.sprite.Sprite):
+    #initialisierung von konstanten Werten
     WIDTH, HEIGHT = 5, 5
     NEUTRAL_COLOR = (255, 255, 255)
     ATTRACTED_COLOR = "red"
@@ -13,7 +14,7 @@ class Bee(pygame.sprite.Sprite):
     SPEED = 1
     RADIUS = 100
     STARTTIME = time.time()
-    FLOWERGOAL = 2
+    #FLOWERGOAL = 2
 
     def __init__(self, hive, lebensdauer):
         super().__init__()
@@ -26,7 +27,7 @@ class Bee(pygame.sprite.Sprite):
         self.dir = pygame.math.Vector2(
             uniform(-1.0, -1.0), uniform(-1.0, -1.0)
         ).normalize()
-        self.lebensdauer = uniform(lebensdauer, lebensdauer + 10)  # in Sekunden
+        self.lebensdauer = uniform(lebensdauer, lebensdauer + 10)# in Sekunden
         self.lastflower = None
         """
             Speichert die Position der Biene als Float, wichtig für interne
@@ -49,14 +50,14 @@ class Bee(pygame.sprite.Sprite):
         Sobald sie im Radius einer Blume kommt, verfärbt sie sich rot und fliegt zur Blume.
         Anschließend wird sie grün und fliegt zu ihrem Hive zurück.
     """
-    """
-    Bienen werden auf die gegenüberliegende Seite teleportiert sobald sie
-    den Ramen ueberschreiten.
-    Funktioniert voll okay, auch ohne Torus-Distanz (oberflächlich)
-    TODO: wenn Biene von Blume angezogen werden und teleportieren, dann bleiben sie rot
-    --> reset oder so
-    """
 
+    """
+        Bienen werden auf die gegenüberliegende Seite teleportiert sobald sie
+        den Ramen ueberschreiten.
+        Funktioniert voll okay, auch ohne Torus-Distanz (oberflächlich)
+        TODO: wenn Biene von Blume angezogen werden und teleportieren, dann bleiben sie rot
+        --> reset oder so
+    """
     def tp(self):
         pos_x = int(round(self.float_rect.x))
         pos_y = int(round(self.float_rect.y))
@@ -68,8 +69,8 @@ class Bee(pygame.sprite.Sprite):
             self.float_rect.y = 1
         elif pos_y <= 0:
             self.float_rect.y = config.WIDTH - 1
-
-    # TODO Bienen Updaten nicht zu return
+    
+    #schwarmbewegung
     def update(self, flower, bees):
         scale = 3.0
 
@@ -128,7 +129,6 @@ class Bee(pygame.sprite.Sprite):
 
                 if nearestBeeDistTo < radius_align and nearestBeeDistTo > radius_repel:
                     social_vec = NearestBeeDir
-
         else:
             if nearestBeeDistTo < radius_attract and nearestBeeDistTo > radius_align:
                 social_vec = NearestBeeVecTo.normalize()
@@ -187,7 +187,8 @@ class Bee(pygame.sprite.Sprite):
     def die(self):
         self.hive.addLivingBee(-1)
         self.kill()
-
+    
+    #draw() von pygame.sprite.Sprite ueberschrieben
     def draw(self, screen):
         self.rect.center = (
             int(round(self.float_rect.x)),
