@@ -69,7 +69,7 @@ class Bee(pygame.sprite.Sprite):
             self.float_rect.y = 1
         elif pos_y <= 0:
             self.float_rect.y = config.WIDTH - 1
-    
+
     #schwarmbewegung
     def update(self, flower, bees):
         scale = 3.0
@@ -101,7 +101,6 @@ class Bee(pygame.sprite.Sprite):
         # Biene stirbt nach gewisser Zeit
         if time.time() - self.STARTTIME >= self.lebensdauer:
             self.die()
-            print("die", self.hive.name, self.hive.livingBees)
 
         # alle bienen durchgehen um nächste zu finden
         for bee in bees:
@@ -187,7 +186,7 @@ class Bee(pygame.sprite.Sprite):
     def die(self):
         self.hive.addLivingBee(-1)
         self.kill()
-    
+
     #draw() von pygame.sprite.Sprite ueberschrieben
     def draw(self, screen):
         self.rect.center = (
