@@ -44,7 +44,10 @@ for i in range(config.FLOWERS):
     add_sprite(flower.Flower(uniform(10,config.WIDTH-10),uniform(10,config.HEIGHT-10)), flowers)
 
 '''
-Main
+    Main
+    Ist verantwortlich fuer die ganze Simulation, hier werden alle Objekte aktualisiert/gezeichnet
+    Keypress-Aktionen überwacht und ausgewertet
+    Matplotlib am Ende der Simulation aufgerufen
 '''
 def main():
     global running
@@ -77,6 +80,10 @@ def main():
             flowers.draw(screen)
             hives.draw(screen)
             
+            '''
+                In einem Intervall von einer Sekunde wird von jedem Hive in der Sprite-Gruppe Hives 
+                die Anzahl der lebenden Bienen und der Zeitpunkt in einen Array uebergeben und gespeichert
+            '''
             curTime = time.time()
             if ((curTime-startzeit)>1):
                 print("update")
@@ -91,6 +98,9 @@ def main():
         pygame.display.flip()
         clock.tick(60)
     #END
+    '''
+        Hive-Daten werden mit Matplotlib auf das selbe Koordinatensystem geplottet
+    '''
     for hive in hives:
         print(hive.name,hive.data)
         l1 = [x[0] for x in hive.data]
@@ -99,5 +109,9 @@ def main():
     pygame.quit()
     plt.show()
 
+'''
+    main() wird bei start des Programms aufgerufen
+'''
 if __name__ == "__main__":
      main()
+
